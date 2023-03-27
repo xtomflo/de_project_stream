@@ -1,6 +1,7 @@
-# Beginner Data Engineering Project - Stream Version
+# Streaming Data Project - Fraudulent User Detection using Apache Flink
 
-This is the repo for the blog at [Data Engineering Project: Stream Edition](https://www.startdataengineering.com/post/data-engineering-project-for-beginners-stream-edition/)
+This is my attempt to learn some Scala, get familiar with Flink and gain experience working with streaming data in practice.
+To kick-off the project I've use the starting form of the repo from @josephmachado which is described in this article: [Data Engineering Project: Stream Edition](https://www.startdataengineering.com/post/data-engineering-project-for-beginners-stream-edition/)
 
 ## Prerequisites
 
@@ -32,8 +33,8 @@ Do some manual checks using
 
 ```bash
 
-docker exec -t beginner_de_project_stream_kafka_1 kafka-console-consumer.sh --bootstrap-server :9092  --topic server-logs --from-beginning --max-messages 10 # used to check the first 10 messages in the server-logs  topic
-docker exec -t beginner_de_project_stream_kafka_1 kafka-console-consumer.sh --bootstrap-server :9092  --topic alerts --from-beginning --max-messages 10 # used to check the first 10 messages in the alerts topic
+docker exec -t de_project_stream_kafka_1 kafka-console-consumer.sh --bootstrap-server :9092  --topic server-logs --from-beginning --max-messages 10 # used to check the first 10 messages in the server-logs  topic
+docker exec -t de_project_stream_kafka_1 kafka-console-consumer.sh --bootstrap-server :9092  --topic alerts --from-beginning --max-messages 10 # used to check the first 10 messages in the alerts topic
 ```
 
 and
