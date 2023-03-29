@@ -44,9 +44,9 @@ under the License.
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<flink.version>1.12-SNAPSHOT</flink.version>
-		<scala.binary.version>2.11</scala.binary.version>
-		<scala.version>2.11.12</scala.version>
+		<flink.version>1.14-SNAPSHOT</flink.version>
+		<scala.binary.version>2.12</scala.binary.version>
+		<scala.version>2.12.15</scala.version>
 		<log4j.version>2.12.1</log4j.version>
 	</properties>
 
@@ -82,14 +82,14 @@ under the License.
 
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-connector-jdbc_2.11</artifactId>
-			<version>1.11.2</version>
+			<artifactId>flink-connector-jdbc_2.12</artifactId>
+			<version>1.14.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-table-api-scala-bridge_2.11</artifactId>
-			<version>1.11.2</version>
+			<artifactId>flink-table-api-scala-bridge_2.12</artifactId>
+			<version>1.14.4</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -109,11 +109,6 @@ under the License.
 		</dependency>
 		-->
 
-		<dependency>
-			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-jdbc_2.12</artifactId>
-			<version>1.10.2</version>
-		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>

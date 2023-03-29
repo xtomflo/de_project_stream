@@ -52,6 +52,8 @@ class ServerLogSink extends RichSinkFunction[String] {
   }
 
   override def open(parameters: Configuration): Unit = {
+    Class.forName("org.postgresql.Driver")
+
     conn = DriverManager.getConnection("jdbc:postgresql://postgres:5432/events?user=startdataengineer&password=password")
     stmt = conn.prepareStatement(INSERT_CASE)
   }

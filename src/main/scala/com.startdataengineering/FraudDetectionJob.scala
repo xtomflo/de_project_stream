@@ -2,7 +2,7 @@ package com.startdataengineering
 
 import java.util.Properties
 import org.apache.flink.api.common.serialization.SimpleStringSchema
-import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
+import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer, FlinkKafkaProducer}
 
 object FraudDetectionJob {
@@ -20,8 +20,8 @@ object FraudDetectionJob {
     myConsumer.setStartFromEarliest()
 
     val events = env
-      .addSource(myConsumer)
-      .name("incoming-events")
+        .addSource(myConsumer)
+        .name("incoming-events")
 
     val alerts: DataStream[String] = events
       .keyBy(event => event.split(",")(1))

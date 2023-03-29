@@ -43,7 +43,7 @@ object ServerLogGenerator {
     val producer = new KafkaProducer[String, String](props)
     var i = 0
 
-    while(i<100000) {
+    while(i<1000000) {
       val log: ServerLog = getServerLog()
       val record = new ProducerRecord[String, String](topic, log.eventId, log.toString)
       producer.send(record)

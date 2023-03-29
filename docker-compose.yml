@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   jobmanager:
-    image: flink:1.11.0-scala_2.11
+    image: flink:1.14-scala_2.12
     command: "jobmanager.sh start-foreground"
     ports:
       - 8081:8081
@@ -12,7 +12,7 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
-    image: flink:1.11.0-scala_2.11
+    image: flink:1.14-scala_2.12
     depends_on:
       - jobmanager
     command: "taskmanager.sh start-foreground"

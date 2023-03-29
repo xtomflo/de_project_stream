@@ -32,8 +32,7 @@ docker ps # display all running containers
 Do some manual checks using
 
 ```bash
-
-docker exec -t de_project_stream_kafka_1 kafka-console-consumer.sh --bootstrap-server :9092  --topic server-logs --from-beginning --max-messages 10 # used to check the first 10 messages in the server-logs  topic
+ exec -t de_project_stream_kafka_1 kafka-console-consumer.sh --bootstrap-server :9092  --topic server-logs --from-beginning --max-messages 10 # used to check the first 10 messages in the server-logs  topic
 docker exec -t de_project_stream_kafka_1 kafka-console-consumer.sh --bootstrap-server :9092  --topic alerts --from-beginning --max-messages 10 # used to check the first 10 messages in the alerts topic
 ```
 
