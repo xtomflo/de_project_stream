@@ -31,12 +31,12 @@ class FraudDetection extends KeyedProcessFunction[String, String, String]{
                                value: String,
                                ctx: KeyedProcessFunction[String, String, String]#Context,
                                out: Collector[String]): Unit = {
-    val logEvent: ServerLog = ServerLog.fromString(value)
+    val logEvent: Option[ServerLog] = ServerLog.fromString(value)
 
     val isLoggedIn = loginState.value
     val prevCountry = prevLoginCountry.value
 
-    if ((isLoggedIn != null) && (prevCountry != null)){
+    logEvent.foreach { logEvent =>
       if ((isLoggedIn == true) && (logEvent.eventType == "login")) {
         if (prevCountry != logEvent.locationCountry) {
           val alert: String = f"Alert eventID: ${logEvent.eventId}%s, " +
@@ -45,25 +45,35 @@ class FraudDetection extends KeyedProcessFunction[String, String, String]{
           out.collect(alert)
         }
       }
-    }
-    else if (logEvent.eventType == "login"){
-      loginState.update(true)
-      prevLoginCountry.update(logEvent.locationCountry)
-
-      // 5 * 60 * 1000L -> 5 min
-      val timer = logEvent.eventTimeStamp + (5 * 60 * 1000L)
-      ctx.timerService.registerProcessingTimeTimer(timer)
-      timerState.update(timer)
-    }
-    if (logEvent.eventType == "log-out") {
-      loginState.clear()
-      prevLoginCountry.clear()
-
-      val timer = timerState.value()
-      if (timer != null){
-        ctx.timerService.deleteProcessingTimeTimer(timer)
+      if ((isLoggedIn != null) && (prevCountry != null)){
+        if ((isLoggedIn == true) && (logEvent.eventType == "login")) {
+          if (prevCountry != logEvent.locationCountry) {
+            val alert: String = f"Alert eventID: ${logEvent.eventId}%s, " +
+              f"violatingAccountId: ${logEvent.accountId}%d, prevCountry: ${prevCountry}%s, " +
+              f"currentCountry: ${logEvent.locationCountry}%s"
+            out.collect(alert)
+          }
+        }
       }
-      timerState.clear()
+      else if (logEvent.eventType == "login"){
+        loginState.update(true)
+        prevLoginCountry.update(logEvent.locationCountry)
+
+        // 5 * 60 * 1000L -> 5 min
+        val timer = logEvent.eventTimeStamp + (5 * 60 * 1000L)
+        ctx.timerService.registerProcessingTimeTimer(timer)
+        timerState.update(timer)
+      }
+      if (logEvent.eventType == "log-out") {
+        loginState.clear()
+        prevLoginCountry.clear()
+
+        val timer = timerState.value()
+        if (timer != null){
+          ctx.timerService.deleteProcessingTimeTimer(timer)
+        }
+        timerState.clear()
+      }
     }
   }
 

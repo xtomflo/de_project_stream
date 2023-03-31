@@ -35,12 +35,14 @@ class ServerLogSink extends RichSinkFunction[String] {
   override def invoke(entity: String, context: SinkFunction.Context): Unit = {
     val sl = ServerLog.fromString(entity)
 
-    stmt.setString(1, sl.eventId)
-    stmt.setInt(2, sl.accountId)
-    stmt.setString(3, sl.eventType)
-    stmt.setString(4, COUNTRY_MAP.getOrElse(sl.locationCountry, "Other"))
-    stmt.setString(5, dtFormat.format(sl.eventTimeStamp * 1000L))
-    stmt.addBatch()
+    sl.foreach { log =>
+      stmt.setString(1, log.eventId)
+      stmt.setInt(2, log.accountId)
+      stmt.setString(3, log.eventType)
+      stmt.setString(4, COUNTRY_MAP.getOrElse(log.locationCountry, "Other"))
+      stmt.setString(5, dtFormat.format(log.eventTimeStamp * 1000L))
+      stmt.addBatch()
+    }
     batchSize = batchSize + 1
 
     // write to DB once we have 10k events accumulated

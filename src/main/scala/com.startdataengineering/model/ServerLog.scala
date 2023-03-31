@@ -11,8 +11,17 @@ case class ServerLog(
 }
 
 object ServerLog {
-  def fromString(value: String): ServerLog = {
+  def fromString(value: String): Option[ServerLog] = {
     val elements: Array[String] = value.split(",")
-    ServerLog(elements(0), elements(1).toInt, elements(2), elements(3), elements(4).toLong)
+
+    elements match {
+      case Array(eventId, accountId, eventType, locationCountry, eventTimeStamp) =>
+        try {
+          Some(ServerLog(eventId, accountId.toInt, eventType, locationCountry, eventTimeStamp.toLong))
+        } catch {
+          case _: NumberFormatException => None
+        }
+      case _ => None
+    }
   }
 }
