@@ -12,9 +12,15 @@ import com.startdataengineering.model.ServerLog
 
 class ServerLogSink extends RichSinkFunction[String] {
 
-  private val INSERT_CASE = "INSERT INTO server_log " +
-    "(eventId, userId, eventType, locationCountry, eventTimeStamp) " +
-    "VALUES (?, ?, ?, ?, ?)"
+  private val INSERT_CASE = """
+      |INSERT INTO server_log (eventId, userId, eventType, locationCountry, eventTimeStamp)
+      |  VALUES (?, ?, ?, ?, ?)
+      |  ON CONFLICT (eventId) DO UPDATE SET
+      |    userId = excluded.userId,
+      |    eventType = excluded.eventType,
+      |    locationCountry = excluded.locationCountry,
+      |    eventTimeStamp = excluded.eventTimeStamp
+    """.stripMargin
 
   private val COUNTRY_MAP = Map(
     "USA" -> "United States of America",
@@ -47,7 +53,12 @@ class ServerLogSink extends RichSinkFunction[String] {
 
     // write to DB once we have 10k events accumulated
     if(batchSize >= 10000) {
-      stmt.executeBatch()
+      try {
+        stmt.executeBatch()
+      } catch {
+        case e: Exception => e.printStackTrace()
+          // Log the error or handle it as needed
+      }
       batchSize = 0
     }
 
